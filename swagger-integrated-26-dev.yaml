@@ -1,0 +1,3259 @@
+openapi: "3.0.1"
+info:
+  title: "crisi-impresa-api"
+  version: "v1.0"
+
+paths:
+  /utente/listaAbilitazioni:
+    get:
+      summary: get lista abilitazioni
+      description: Ritorna la lista di abilitazioni per un dato utente
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: profilo
+          schema:
+            type: string
+        - in: query
+          name: idRuolo
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listaPdaObj"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+        
+  /pda/update/setup:
+    post:
+      summary: update pda e setup
+      description: Update della PDA, setup e profile, se non presente ne crea una nuova
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InputSetup'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/update/periodo:
+    put:
+      summary: update periodo
+      description: Update del periodo della PDA - aggiornamento del setup
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InputUpdateSetup'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputUpdateSetup'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/archivio:
+    get:
+      summary: get archivio
+      description: Ritorna l'archivio, associato all'utente
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: header
+          name: idSoggetto
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listaPdaObj"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/listaPda:
+    get:
+      summary: get lista delle pda
+      description: Ritorna la lista delle PDA, associate all’utente
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: header
+          name: idSoggetto
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listaPdaObj"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/listaPdaAttive:
+    get:
+      summary: get lista delle pda attive
+      description: Ritorna la lista delle PDA attive, associate all’utente
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: header
+          name: idSoggetto
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listaPdaObj"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/listaPdaChiuse:
+    get:
+      summary: get lista delle pda chiuse
+      description: Ritorna la lista delle PDA chiuse, associate all’utente
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: header
+          name: idSoggetto
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listaPdaObj"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /upload/checkFile:
+    get:
+      summary: metodo di check dei file
+      description: Controlla lo stato del file caricato su S3
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: header
+          name: key
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: versionId
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutputCheckFile"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /upload/deleteFile:
+    delete:
+      summary: metodo per cancellare file
+      description: Cancella il file con il versionId
+      # Operation-specific security:
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: query
+          name: versionId
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutputCheckFile"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}:
+    get:
+      summary: get pda
+      description: Ritorna la PDA selezionata
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/listaModuli:
+    get:
+      summary: get moduli
+      description: Ritorna i dati necessari alla preview moduli
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/getPreviewModuli:
+    get:
+      summary: get preview moduli
+      description: Ritorna la preview dei moduli
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/getValutazione:
+    get:
+      summary: get valutazione
+      description: Ritorna la valutazione
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/confermaValutazione:
+    post:
+      summary: conferma esito
+      description: aggiorna stato pda e conferma esito
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/getPianoDiAzione:
+    get:
+      summary: get piano azione
+      description: Ritorna il piano di azione
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/aggiungiPianoDiAzione:
+    post:
+      summary: aggiunge piano di azione
+      description: Sostituisce il piano di azione precedentemente inserito con quello attuale
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/confermaPianoDiAzione:
+    post:
+      summary: conferma piano di azione
+      description: Chiude il piano di azione (fine step 2 finalizzazione)
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/getDomandaApprovazione:
+    get:
+      summary: get domanda approvazione
+      description: Ritorna la domanda di approvazione in base al tipo di utente
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/rispostaDomandaApprovazione:
+    post:
+      summary: risposta domanda approvazione
+      description: Risponde alla domanda di approvazione
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/chiusuraApprovazione:
+    post:
+      summary: chiusura approvazione e pda
+      description: Chiude la procedura di approvazione e la PDA, creandone una nuova
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/listabozze:
+    get:
+      summary: get pda
+      description: Ritorna la lista di bozze della PDA
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}:
+    get:
+      summary: get dati singolo modulo
+      description: Ritorna i risultati del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getBozza:
+    get:
+      summary: get dati bozza
+      description: Ritorna i risultati del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/aggiornaBozza:
+    post:
+      summary: update dati bozza
+      description: Crea/aggiorna la bozza del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/deleteBozza:
+    delete:
+      summary: delete dati bozza
+      description: Cancellazione della bozza del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/preview:
+    get:
+      summary: ottieni preview modulo
+      description: Restituisce la preview del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModulo'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomande:
+    get:
+      summary: get domande qq
+      description: Ritorna le domande del questionario qualitativo in base all ateco
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente' 
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+  
+  /pda/{idPda}/moduli/{modulo}/valutazionedomande:
+    post:
+      summary: valutazione domande qq
+      description: Valuta le domande del questionario e restituisce la PDA aggiornata
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/dichiarazionePreModulo:
+    post:
+      summary: dichiarazione pre modulo indicatori
+      description: Crea e setta il pre modulo indicatori
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getInputIndicatori:
+    get:
+      summary: get input indicatori
+      description: Restituisce l'input degli ndicatori
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getInputPNN:
+    get:
+      summary: get input patrimonio netto negativo
+      description: Restituisce l'input per il patrimonio netto negativo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandainizialeDSCR:
+    get:
+      summary: get domanda iniziale DSCR
+      description: Restituisce la domanda che apre il modulo DSCR
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandafinaleDSCR:
+    get:
+      summary: get domanda finale DSCR
+      description: Restituisce la domanda che chiude in DSCR
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/gettabellaDSCR:
+    get:
+      summary: get tabella DSCR
+      description: Restituisce la tabella per costruire il DSCR
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/calcolaDSCR:
+    post:
+      summary: calcola DSCR
+      description: Calcola DSCR
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/rispostadomandaDSCR:
+    post:
+      summary: Risposte DSCR
+      description: Invia risposte a domande relative a DSCR
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandainizialeControparti:
+    get:
+      summary: get domanda iniziale controparti
+      description: Restituisce la domanda che apre il modulo domanda controparti
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/rispostadomandaControparti:
+    post:
+      summary: Risposte Controparti
+      description: Invia risposte a domande relative a Controparti
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/calcolaControparti:
+    post:
+      summary: Calcolo Controparti
+      description: Calcolo controparti
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandainizialeAnalisiSoggetto:
+    get:
+      summary: get domanda iniziale analisi soggetto
+      description: Restituisce la domanda che apre il modulo domanda analisi soggetto
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/rispostadomandaAnalisiSoggetto:
+    post:
+      summary: Risposte analisi soggetto
+      description: Invia risposte a domande relative a analisi soggetto
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/calcolaAnalisiSoggetto:
+    post:
+      summary: Calcolo AnalisiSoggetto
+      description: Calcolo AnalisiSoggetto
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandainizialeART15:
+    get:
+      summary: get domanda iniziale ART 15
+      description: Restituisce la domanda che apre il modulo ART 15
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/rispostadomandaART15:
+    post:
+      summary: Risposte ART 15
+      description: Invia risposte a domande relative a ART 15
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/prospettiART15/{prospetto}:
+    get:
+      summary: get prospetti iva ART 15
+      description: Restituisce i prospetti iva
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: prospetto
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/valutazioneART15:
+    post:
+      summary: Valutazione ART 15
+      description: Calcola i dati dell'ART 15
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/inserisciCreditiART15:
+    post:
+      summary: Inserisci crediti PA ART 15
+      description: Calcola i dati dell'ART 15 integrato con i crediti PA
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/getdomandainizialeART24:
+    get:
+      summary: get domanda iniziale ART 24
+      description: Restituisce la domanda che apre il modulo ART 24
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/rispostadomandaART24:
+    post:
+      summary: Risposte ART 24
+      description: Invia risposte a domande relative a ART 24
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/prospettiART24/{prospetto}:
+    get:
+      summary: get prospetti iva ART 24
+      description: Restituisce i prospetti iva
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: prospetto
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/valutazioneART24:
+    post:
+      summary: Valutazione ART 24
+      description: Calcola i dati dell'ART 24
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/calcolaIndicatori:
+    post:
+      summary: calcola indicatori
+      description: Calcola gli indicatori
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/calcolaPNN:
+    post:
+      summary: calcola patrimonio netto negativo
+      description: Calcola patrimonio netto negativo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionarioQualtativoRequest'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultPda"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/allegati/getdownloadlink:
+    get:
+      summary: get link download file
+      description: Ritorna il link temporeaneo di download del file
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: versionid
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadLink"
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/generazip:
+    post:
+      summary: get link download zip file
+      description: Genera uno zip con i file passati in input e restituisce un link temporaneo per scaricarlo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                  modulo:
+                    type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadLink'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/associautente:
+    put:
+      summary: associa utenti pda
+      description: Aggiunge utenti alla PDA
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsers'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputIdPda'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    delete:
+      summary: associa utenti pda
+      description: Aggiunge utenti alla PDA
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsers'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputIdPda'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/archiviapda:
+    post:
+      summary: archivia pda
+      description: Archivia la PDA e ne apre una nuova
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputIdPda'
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/confermaDati:
+    post:
+      summary: conferma dati modulo
+      description: Conferma dati del modulo, lo stato passa da 1 a 2
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfermaDati'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  datiConfermati:
+                    type: boolean
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/overrideRisultato:
+    post:
+      summary: override modulo
+      description: Ovveride del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                datiOverrideModulo:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DatiOverrideModulo'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  datiAggiornati:
+                    type: boolean
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/moduli/{modulo}/updateCommenti:
+    post:
+      summary: aggiornamento commenti del modulo
+      description: Aggiornamento dei commenti del modulo
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modulo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commenti:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CommentiModulo'
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  datiAggiornati:
+                    type: boolean
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/delete/{idPda}:
+    get:
+      summary: delete pda
+      description: Delete della pda specificata
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:  # todo: aggiornare
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/piteco/listaDSCR:
+    get:
+      summary: get lista DSCR Piteco
+      description: Ritorna la lista di DSCR Piteco gia' filtrata
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/piteco/DSCR/{basename}:
+    get:
+      summary: get singolo file DSCR Piteco
+      description: Ritorna il contenuto del file Piteco scelto
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+  /pda/{idPda}/piteco/generaPreviewDSCR/{basename}:
+    get:
+      summary: get preview del file DSCR
+      description: Ritorna il link del PDF della preview generata
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/idUtente'
+        - in: path
+          name: idPda
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: Ques
+        405:
+          description: "405 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorStandard"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:588260564181:function:ChiamataAPIDev/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+
+components:
+
+  securitySchemes:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: x-api-key  # name of the header, query parameter or cookie
+  
+  parameters:
+  
+    idUtente:
+      in: header
+      name: idUtente
+      required: true
+      schema:
+        type: string
+
+  schemas:
+
+    Pda:
+      type: object
+      properties:
+        idPda:  # opzionale
+          type: string
+        setup:
+          $ref: '#/components/schemas/setup'
+        profile:
+          $ref: '#/components/schemas/profile'
+        moduli:
+          type: array
+          items:
+            type: object
+        timestampUltimaModifica:
+          type: integer
+        timestampCreazione:
+          type: integer
+        statoPDA:
+          type: integer # può essere 0, 1, 2
+          enum:
+            - 1  # in corso
+            - 2  # finalizzato
+            - 3  # validata
+        listaUserId:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              tipologia:  # A: azienda, S: sindaco, R: revisore, O: altro
+                type: string
+                enum:
+                  - A
+                  - S
+                  - R
+                  - O
+        valutazionePDA:
+          type: object
+          properties:
+            segnalazioni:
+              type: boolean
+            inScadenza:
+              type: boolean
+            inCrisi:
+              type: boolean
+            attiva:
+              type: boolean
+            valutazione:
+              type: object
+            inLavorazione:
+              type: boolean
+
+    listaPdaObj:
+      type: object
+      properties:
+        status:
+          type: integer
+        listaPda:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pda'
+
+    ResultPda:
+      type: object
+      properties:
+        status:
+          type: integer
+        pda:
+          $ref: '#/components/schemas/Pda'
+          
+    ResultModulo:
+      type: object
+      properties:
+        status:
+          type: integer
+        modulo:
+          $ref: '#/components/schemas/modulo'
+    
+    ResultDeletePda:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+
+    Periodo:
+      type: object
+      properties:
+        timestampPeriodoInizio:
+          type: integer
+        timestampPeriodoFine:
+          type: integer
+
+    InputSetup:
+      type: object
+      properties:
+        setup:
+          $ref: '#/components/schemas/setup'
+        profile:
+          $ref: '#/components/schemas/profile'
+        idUtente:
+          type: string
+        tipologiaUtente:  # opzionale
+          type: string
+        listaUserId:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              tipologia: # A: azienda, S: sindaco, R: revisore, O: altro
+                type: string
+                enum:
+                  - A
+                  - S
+                  - R
+                  - O
+        idPda:  # opzionale
+          type: string
+          
+    InputUpdateSetup:  # profilo azienda
+      type: object
+      properties:
+        periodo:
+          $ref: '#/components/schemas/Periodo'
+        idUtente:
+          type: string
+        idPda:
+          type: string
+          
+    OutputIdPda:  # profilo azienda
+      type: object
+      properties:
+        status:
+          type: integer
+        idPda:
+          type: string
+          
+    QuestionarioQualtativoRequest:  # profilo azienda
+      type: object
+      properties:
+        questionarioQualitativo:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionarioQualitativo'
+  
+    OutputUpdateSetup:  # profilo azienda
+      type: object
+      properties:
+        status:
+          type: integer
+        setup:
+          $ref: '#/components/schemas/setup'
+          
+    OutputCheckFile:  # profilo azienda
+      type: object
+      properties:
+        status:
+          type: integer
+          enum:
+            - -7
+            - -6
+            - -5
+            - -4
+            - -3
+            - -2
+            - -1
+            - 0
+            - 1
+            - 2
+            - 3
+        message:
+          type: string
+          enum:
+            - Utente non associato a questa PDA
+            - Modulo non valido
+            - Percorso file non corretto
+            - x-amz-tipologia mancante
+            - PDA non trovata
+            - Errore non identificato
+            - File non trovato
+            - File ricevuto
+            - Check completati
+            - Controlli di validità completati
+            - Controlli completati
+    
+    profile:  # profilo azienda
+      type: object
+      properties:
+        ragioneSociale:
+          type: string
+        codiceFiscale:
+          type: string
+        idSoggetto: # ID soggeteto cerved
+          type: integer
+        partitaIVA:
+          type: string
+        tipologiaSocieta:
+          type: string
+          
+    DownloadLink:  # profilo azienda
+      type: object
+      properties:
+        status:
+          type: integer
+        link:
+          type: string
+
+    UpdateUsers:  # profilo azienda
+      type: object
+      properties:
+        id:
+          type: string
+        tipologia:
+          type: string
+          
+    modulo:
+      type: object
+      properties:
+        modulo:
+          type: string
+          enum:
+            - "CR"
+            - "QQ"
+        stato:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+        timestampUltimaModifica:
+          type: integer
+        data:
+          type: object
+        stausProcedura:
+          type: integer
+          enum:
+            - -2
+            - -1
+            - 0
+            - 1
+            - 2
+        scoreModulo:
+          type: integer
+          enum:
+            - -2
+            - 1
+            - 2
+            - 3
+        componentiScore:
+          type: array
+          items:
+            type: object
+        alert:
+          type: array
+          items:
+            type: object
+        override:
+          type: boolean
+        allegati:
+          $ref: '#/components/schemas/Allegati'
+        confermaDati:
+          $ref: '#/components/schemas/ConfermaDati'
+        datiOverrideModulo:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatiOverrideModulo'
+        commentoModulo:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentiModulo'
+    
+    Allegati:
+      type: object
+      properties:
+        versionId:
+          type: string
+        idUtente:
+          type: string
+        fileName:
+          type: string
+        timestampUpload:
+          type: integer
+        tipologia:
+          type: string
+          enum:
+            - allegato
+            - analisi
+        stato:
+          type: integer
+          enum:
+            - -1
+            - 0
+        errore:
+          type: array
+          items:
+            type: object
+    
+    ConfermaDati:
+      type: object
+      properties:
+        idUtente:
+          type: string
+        timestamp:
+          type: integer
+        conferma:
+          type: boolean
+
+    DatiOverrideModulo:
+      type: object
+      properties:
+        scoreModulo:
+          type: integer
+        preScoreModulo:
+          type: integer
+        timestamp:
+          type: integer
+        idUtente:
+          type: string
+        commento:
+          type: string
+        listaIdAllegati:
+          type: array
+          items:
+            type: string
+            
+    CommentiModulo:
+      type: object
+      properties:
+        idUtente:
+          type: string
+        commento:
+          type: string
+        timestamp:
+          type: integer
+        listaIdAllegati:
+          type: array
+          items:
+            type: string
+    
+    setup:
+      type: object
+      properties:
+        periodo:
+          $ref: '#/components/schemas/Periodo'
+        overrideAteco:
+          type: object
+          properties:
+            preAteco:
+              type: array
+              items:
+                type: string
+            confermaAteco:
+              type: boolean
+            postAteco:
+              type: array
+              items:
+                type: string
+        timestampUltimaModifica:
+          type: integer
+        contabilitaAzienda:
+          type: string
+          enum:
+            - "ORDINARIA"
+            - "SEMPLIFICATA"
+        tipologiaBilancio:
+          type: string
+          enum:
+            - "ORDINARIO"
+            - "ABBREVIATO"
+            - "MICRO"
+        maxRicaviProgettiPluriennali:
+          type: boolean
+        presenzaSindaco:
+          type: boolean
+        soggetoIva:
+          type: boolean
+        periodicitaIVA:
+          type: string
+          enum:
+            - "MENSILE"
+            - "TRIMESTRALE"
+        versamentoINPS:
+          type: boolean
+        versamentoRetribuzioni:
+          type: boolean
+          
+    QuestionarioQualitativo:
+      type: "object"
+      properties:
+        idDomanda: 
+          type: "string"
+          description: "Identificativo della domanda"
+        spiegazione: 
+          description: "Breve testo che spiega la domanda"
+          type: "string"
+        testo:
+          description: "Testo della domanda"
+          type: "string"
+        categoria: 
+          description: "Sezione che determina un gruppo di domande"
+          type: "string"
+          enum:
+          - "SETTORE"
+          - "PROPRIETA'_/_MANAGEMENT"
+          - "POSIZIONAMENTO_STRATEGICO"
+          - "GRUPPO_ECONOMICO_/_PROPRIETA'"
+          - "VALUTAZIONE_BILANCIO"
+          - "POSIZIONE_SUL_MERCATO"
+          - "CHECK_LIST_EVENTI_NEGATIVI"
+          - "RAPPORTI_CON_LE_BANCHE"
+          - "SITUAZIONE_ATTUALE_DELL'_AZIENDA"
+          - "COMPLIANCE"
+        tema: 
+          description: "TODO"
+          type: "string"
+          enum:
+          - "PROSPETTIVE_DOMANDA"
+          - "PROSPETTIVE_PREZZI_DI_VENDITA"
+          - "PROSPETTIVE_PREZZI_MATERIE_PRIME"
+          - "NORMATIVA"
+          - "EVENTI_ESTERNI"
+          - "DIMENSIONE"
+          - "EVOLUZIONE_DELLA_QUOTA_DI_MERCATO"
+          - "EVENTI_NEGATIVI"
+          - "FORNITORI_E_MATERIE_PRIME"
+          - "CAPACITA'_PRODUTTIVA_efficienza"
+          - "CAPACITA'_PRODUTTIVA_investimenti"
+          - "CAPACITA'_PRODUTTIVA_stato_degli_impianti"
+          - "PRODOTTO"
+          - "LOCALIZZAZIONE"
+          - "CLIENTI_VENDITE"
+          - "GRUPPO_GIURIDICO"
+          - "GRUPPO_FAMILIARE"
+          - "STABILITA'"
+          - "LIVELLO_DI_COESIONE"
+          - "ATTEGGIAMENTO_VERSO_IL_RISCHIO"
+          - "FIGURE_CHIAVE"
+          - "MANAGEMENT_ORGANIZZAZIONE"
+          - "MANAGEMENT_TURNOVER"
+          - "CRITERI_DI_VALUTAZIONE"
+          - "VALUTAZIONE_IMMOBILIZZAZIONI_E_IMPAIRMENT"
+          - "RELAZIONE_DI_CONTROLLO"
+          - "CAPITALE_CIRCOLANTE"
+          - "PATRIMONIO_NETTO"
+          - "PASSIVITA'"
+          - "CONTO_ECONOMICO"
+          - "CONCORRENZA"
+          - "POSIZIONE_DEBITORIA_VERSO_LA_PA"
+          - "POSIZIONE_DEBITORIA_VERSO_L'AGENZIA_DELLE_ENTRATE"
+          - "POSIZIONE_DEBITORIA_VERSO_L'INPS"
+          - "POSIZIONE_DEBITORIA_VERSO_L'AGENZIA_DELLE_ENTRATE_/_AGENTE_DELLA_RISCOSSIONE"
+          - "REGOLARITA'_NEL_RICONOSCIMENTO_DELLE_RETRIBUZIONI"
+          - "POSIZIONE_DEBITORIA_VERSO_I_FORNITORI"
+          - "TECNOLOGIA"
+        required:
+          description: "Alcune domande devono obbligatoriamente avere una risposta"
+          type: "boolean"
+        comparto: 
+          description: "Tipologia di lavorazione stabilita dal codice ATECO"
+          type: "string"
+          enum:
+          - "agricoltura"
+          - "industria"
+          - "servizi"
+          - "costruzione"
+          - "utility"
+          - "commercio"
+          - "trasporti"
+          - "infrastrutture"
+        risposte:
+          description: "Lista delle risposte"
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              idRisposta: 
+                description: "Identificativo della risposta"
+                type: "string"
+              idDomanda: 
+                description: "Identificativo della domanda"
+                type: "string"
+              testo:
+                description: "Testo contenuto nella risposta"
+                type: "string"
+              esito:
+                description: "Punteggio pre impostato nel caso la risposta venga selezionata"
+                type: "integer"
+              defaultSelected:
+                description: "Alcune risposte sono pre selezionate da sistema"
+                type: "boolean"
+              selected: 
+                description: "Flag per stabilire se la risposta è stata selezionata"
+                type: "boolean"
+    
+    ErrorStandard:  # errore strandard condiviso
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: string
+        internalMessage:
+          type: string
